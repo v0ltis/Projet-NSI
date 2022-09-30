@@ -73,7 +73,17 @@ class Ice:
             Ice
         ]
         
-        self.strenght = [
+        self.strength = [
             Grass
         ]
-    
+
+
+# Usefull for functions/menu.py :
+# Just need to use `for x in elements_list` instead of `for x in pokedex.elements` wich is unsafe
+elements_list = [
+    Fire(),
+    Water(),
+    Elec(),
+    Grass(),
+    Ice()
+]
