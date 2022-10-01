@@ -51,14 +51,18 @@ def show_options() -> BeautifulTable:
     Return BeatifulTable object (can be printed without precautions)
     """
 
-    x = {"1": "Afficher les pokemons", "2": "Afficher les types"}
+    x = {
+        "1": "Afficher les pokemons",
+        "2": "Afficher les types",
+        "3": "Choisir vos Pokémons"
+    }
 
     table = BeautifulTable()
     table.columns.header = ["ID", "Description"]
 
     table.set_style(BeautifulTable.STYLE_SEPARATED)
 
-    # pairs:
+    # add items to the table
     for key, item in x.items():
 
         table.rows.append([key, item])
