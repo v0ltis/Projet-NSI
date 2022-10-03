@@ -1,10 +1,8 @@
-import functions.menu as menu
+from functions.fonctions_boucles import select_pokemon
 
 
 def main():
-    print(menu.show_options())
-
-    print(menu.show_elements())
+    print(select_pokemon())
 
 
 if __name__ == "__main__":
