@@ -44,7 +44,7 @@ def show_elements() -> BeautifulTable:
 
 def show_options() -> BeautifulTable:
     """
-    Return an str ASCII table of the list of availlables actions.
+    Return a str ASCII table of the list of available actions.
 
     the ID of the action and the description will be displayed
 
@@ -66,5 +66,32 @@ def show_options() -> BeautifulTable:
     for key, item in x.items():
 
         table.rows.append([key, item])
+
+    return table
+
+
+def show_pokemons(poke_list: list) -> BeautifulTable:
+    """
+    poke_list représente la liste des pokémons disponilbles à la selection
+
+    Renvois une table en ASCII des pokemons disponibles.
+    """
+    table = BeautifulTable()
+    table.columns.header = ["ID", "Nom", "Type", "PV", "Dégats"]
+
+    table.set_style(BeautifulTable.STYLE_RST)
+
+    # add items to the table
+    for i in range(len(poke_list)):
+
+        pokemon = poke_list[i]
+
+        table.rows.append([
+            str(i),
+            pokemon.nom,
+            pokemon.element.name.capitalize(),
+            pokemon.pv,
+            pokemon.ptdegat
+            ])
 
     return table
