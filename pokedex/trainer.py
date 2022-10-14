@@ -1,8 +1,9 @@
 # By Barnabe
 
 class Trainer:
-    def __init__(self, name, pokemons: list):
-        self.name = name,
+    def __init__(self, name: str, pokemons: list):
+
+        self.name = name
 
         self.pokemons = pokemons
 

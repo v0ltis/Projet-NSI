@@ -2,6 +2,7 @@
 # https://pypi.org/project/beautifultable/
 from beautifultable import BeautifulTable
 from pokedex.elements import elements_list
+from pokedex.pokemons import liste_pokemons
 
 
 def show_elements() -> BeautifulTable:
@@ -20,7 +21,6 @@ def show_elements() -> BeautifulTable:
 
     # Add all elements of ../pokedex/elements.py in the table.
     for i in range(len(elements_list)):
-
         element = elements_list[i]
 
         # Allow a pretty way to display a list in a string.
@@ -34,9 +34,9 @@ def show_elements() -> BeautifulTable:
 
         # Add items to the table.
         table.rows.append([
-            element.name.capitalize(),      # Element
-            weakns,                         # Faiblaisses
-            strght                          # Forces
+            element.name.capitalize(),  # Element
+            weakns,  # Faiblaisses
+            strght  # Forces
         ])
 
     return table
@@ -51,11 +51,11 @@ def show_options() -> BeautifulTable:
     Return BeatifulTable object (can be printed without precautions)
     """
 
-    x = {
-        "1": "Afficher les pokemons",
-        "2": "Afficher les types",
-        "3": "Choisir vos Pokémons"
-    }
+    menu_keys = [
+        "Afficher les pokemons",
+        "Afficher les types",
+        "Choisir vos Pokémons"
+    ]
 
     table = BeautifulTable()
     table.columns.header = ["ID", "Description"]
@@ -63,14 +63,13 @@ def show_options() -> BeautifulTable:
     table.set_style(BeautifulTable.STYLE_SEPARATED)
 
     # add items to the table
-    for key, item in x.items():
-
-        table.rows.append([key, item])
+    for i in range(len(menu_keys)):
+        table.rows.append([str(i), menu_keys[i]])
 
     return table
 
 
-def show_pokemons(poke_list: list) -> BeautifulTable:
+def show_pokemons(poke_list=liste_pokemons) -> BeautifulTable:
     """
     poke_list représente la liste des pokémons disponilbles à la selection
 
@@ -83,7 +82,6 @@ def show_pokemons(poke_list: list) -> BeautifulTable:
 
     # add items to the table
     for i in range(len(poke_list)):
-
         pokemon = poke_list[i]
 
         table.rows.append([
@@ -92,6 +90,6 @@ def show_pokemons(poke_list: list) -> BeautifulTable:
             pokemon.element.name.capitalize(),
             pokemon.pv,
             pokemon.ptdegat
-            ])
+        ])
 
     return table

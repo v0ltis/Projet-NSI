@@ -1,9 +1,9 @@
 # By Barnabe
-# Represent 6 Pokemon element
+# Represent 6 pokémon element
 #
 # Name field is the displayed name
-# weakness is a list of elements thant the pokemon deals x0.5 damages
-# strength is a list of elements that the pokemon deals x2 damages
+# weakness is a list of elements thant the pokémon deals x0.5 damages
+# strength is a list of elements that the pokémon deals x2 damages
 
 
 class Fire:
