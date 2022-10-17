@@ -35,28 +35,33 @@ class Pokemon:
         return pokemon_ennemi.verif_mort(): on appelle notre fonction verif_mort
         pour regarder a chaque attaque si le pokemon est mort ou pas
         """
-        if pokemon_ennemi.element in self.element.weakness:
-            pokemon_ennemi.pv -= self.ptdegat * 0.5
 
-        elif pokemon_ennemi.element in self.element.strength:
-            pokemon_ennemi.pv -= self.ptdegat * 2
+        damage = self.ptdegat
 
-        else:
-            pokemon_ennemi.pv -= self.ptdegat * 1
+        if type(pokemon_ennemi.element) in self.element.weakness:
+            damage //= 2
 
-        return pokemon_ennemi.verif_mort()
+        elif type(pokemon_ennemi.element) in self.element.strength:
+            damage *= 2
+
+        pokemon_ennemi.pv -= damage
+
+        return pokemon_ennemi.verif_mort(), damage
 
 
-liste_pokemons = [
-    Pokemon("Magicarpe", Water(), 100, 249),
-    Pokemon("Phyllali", Grass(), 100, 50),
-    Pokemon("Pharamp", Elec(), 100, 50),
-    Pokemon("Wailord", Water(), 100, 50),
-    Pokemon("Elekable", Grass(), 100, 50),
-    Pokemon("Sorbouboule", Ice(), 100, 50),
-    Pokemon("Polagriffe", Ice(), 100, 50),
-    Pokemon("Gamblaste", Grass(), 100, 50),
-    Pokemon("Zeraora", Elec(), 100, 50),
-    Pokemon("Arcanin", Fire(), 100, 50),
-    Pokemon("Pyrobut", Fire(), 100, 50)
+liste_pokemons=[
+    Pokemon("Magicarpe", Water(), 30, 200),
+    Pokemon("Phyllali", Grass(), 160, 100),
+    Pokemon("Pharamp", Elec(), 180, 80),
+    Pokemon("Wailord", Water(), 200, 70),
+    Pokemon("Elekable", Elec(), 190, 70),
+    Pokemon("Sorbouboule", Ice(), 220, 90),
+    Pokemon("Polagriffe", Ice(), 250, 80),
+    Pokemon("Gamblaste", Water(), 160, 100),
+    Pokemon("Zeraora", Elec(), 150, 110),
+    Pokemon("Arcanin", Fire(), 180, 80),
+    Pokemon("Maganon", Fire(), 190, 70),
+    Pokemon("Jungko", Grass(), 170, 90),
+    Pokemon("Ronflex", Normal(), 1500, 0),
+    Pokemon("Aspicot", Grass(), 15, 10)
 ]

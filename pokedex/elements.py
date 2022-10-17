@@ -78,6 +78,15 @@ class Ice:
         ]
 
 
+class Normal:
+    def __init__(self):
+        self.name = "normal"
+
+        self.strength = []
+
+        self.weakness = []
+
+
 # Usefull for functions/menu.py :
 # Just need to use `for x in elements_list` instead of `for x in pokedex.elements` wich is unsafe
 elements_list = [

@@ -28,3 +28,12 @@ class Trainer:
         # If all pokémons are dead, the loop will be completed without returning anything.
         # returning False will be considered as loosing.
         return False
+
+    def alive_pokemons(self) -> int:
+        """
+        Return the number of alive pokemons
+        """
+
+        return len([
+                pokemon for pokemon in self.pokemons if not pokemon.dead
+        ])
