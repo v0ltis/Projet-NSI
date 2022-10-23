@@ -124,7 +124,22 @@ def select_pokemon(ia_name) -> tuple:
 
 
 def tour(joueur, ia, show_pokemons=True):
+
+    """
+    This function is called for each user's turn.
+
+    It will show the pokemons of the user and the IA, and ask the user to pick an option (change pokemon, attack, give up or use special attack if possible).
+
+    Joueur and IA are both of type Trainer
+
+    show_pokemons is a boolean, if True, it will show the pokemons of the user and the IA.
+
+    return "break" if the user wants to give up, a Pokemon Object if the player killed the IA's pokemon, False if the player killed the last pokemon of the IA,
+        or return None if none of the above.
+    """
+
     if show_pokemons:
+        # Display trainers/pokémons infos
         table = BeautifulTable()
         table.set_style(BeautifulTable.STYLE_SEPARATED)
         table.columns.header = ["Joueur", "Pokemon", "Type", "PV", "Degats", "Pokémons en vie", "Attq Spé Dispo"]
@@ -151,19 +166,29 @@ def tour(joueur, ia, show_pokemons=True):
 
     table.rows.append([2, "Quitter le Combat"])
 
+    # case the user has a special attack available
+    # will be showed in the table
     if joueur.pokemons[0].attaque_spe_used == False:
         table.rows.append([3, "Attaque spéciale"])
 
     print(table)
 
+    # initialisation of response variable
     response = -1
 
+    # If the user didn't used its special attack:
+    # while his repsponse is not between 0 and 3
+    # or if he used its special attack:
+    # while his repsponse is not between 0 and 2
+    #     ask the action ID
     while not ((0 <= response <= 3 and joueur.pokemons[0].attaque_spe_used == False) or 0 <= response <= 2):
         response = int(input("ID de l'action: "))
 
+    # case the user give up
     if response == 2:
         return "break"
 
+    # case the user want to change pokemon
     elif response == 0:
         poke1 = joueur.pokemons[1]
         poke2 = joueur.pokemons[2]
@@ -181,6 +206,7 @@ def tour(joueur, ia, show_pokemons=True):
 
             return tour(joueur, ia, show_pokemons=False)
 
+    # case the user want to use a special attack AND can use it
     elif response == 3:
         poke_attaq = joueur.pokemons[0]
 
@@ -205,6 +231,7 @@ def tour(joueur, ia, show_pokemons=True):
 
             return None
 
+    # case the user want to attack
     else:
         poke_attaq = joueur.pokemons[0]
 
@@ -229,12 +256,20 @@ def tour(joueur, ia, show_pokemons=True):
 
 
 def tour_ia(user, ia):
+    """
+    function dedicated to the ia combat turn.
+
+    user represent the player Trainer object
+    ia represent the IA Trainer object
+
+    Return new_poke if the pokemon is dead, representing the new pokemon. If all pokemons are dead, return False. Else, return None
+    """
     poke_attaq = ia.pokemons[0]
 
     pke_defence = user.pokemons[0]
 
     # randomly use special attaque if not used yet:
-    # 1/2 chance
+    # 1/3 chance
     if poke_attaq.attaque_spe_used == False and randint(1, 3) == 1:
         poke_attaq.attaque_spe_used = True
 
@@ -247,11 +282,13 @@ def tour_ia(user, ia):
 
         spe_att = False
 
+    # if the pokemon has been killed by the attack
     if is_dead:
         print(f"\n{poke_attaq.nom} a infligé {degats}pts de dégats et éliminé {pke_defence.nom} {'grace à son attaque spéciale ' if spe_att else ''}!")
 
         new_poke = user.change_pokemon()
 
+        # if another pokemon is alive
         if new_poke != False:
                 print(f"Vous avez invoqué {new_poke.nom}, de type {new_poke.element.name} avec {new_poke.pv} PV\n")
 

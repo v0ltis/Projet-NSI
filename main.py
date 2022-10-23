@@ -69,7 +69,9 @@ def main():
         
         round += 1
 
-    poke = f"avec {winner.alive_pokemons()} pokemon{'s' if winner.alive_pokemons() != 1 else ''} toujours en vie"
+    # end of the boucle
+    # Display the winner
+    poke = f"avec {winner.alive_pokemons()} pokemon{'s' if winner.alive_pokemons() != 1 else ''}"
 
     if result == "break":
 
