@@ -88,7 +88,7 @@ class Normal:
 
 
 # Usefull for functions/menu.py :
-# Just need to use `for x in elements_list` instead of `for x in pokedex.elements` wich is unsafe
+# Just need to use `for x in elements_list` instead of `for x in pokedex.elements` wich is unsafe and 𝙢𝙪𝙘𝙝𝙤 𝙢𝙚𝙣𝙤𝙨 𝙜𝙪𝙖𝙥𝙤 !
 elements_list = [
     Fire(),
     Water(),

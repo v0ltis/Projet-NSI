@@ -12,7 +12,7 @@ def main():
     
     show_menu()
 
-    poke_user, poke_ia = select_pokemon()
+    poke_user, poke_ia = select_pokemon(ia_name)
 
     user = Trainer(username, poke_user)
 
@@ -32,15 +32,22 @@ def main():
             print(f"Et en face, {ia.name}, avec {ia.pokemons[0].nom}, {ia.pokemons[1].nom} et {ia.pokemons[2].nom}")
             time.sleep(1)
 
+        """
+        The three lines below will show something like:
+        
+        / ==================== \
+                 Tour 1
+        \ ==================== /
+        """
         print("\n\n/", "="*20, "\\")
         print(" " * 8, f"Tour {round}")
         print("\\", "=" * 20, "/\n\n")
-
         time.sleep(2)
 
+        # result of the Player's turn
         result = tour(user, ia)
 
-        # If user abandoned the game
+        # If Player abandoned the game
         if result == "break":
             winner = ia
             break
@@ -52,6 +59,7 @@ def main():
 
         time.sleep(2.5)
 
+        # result of the IA's turn
         result = tour_ia(user, ia)
 
         # If all users's pokémons are dead
@@ -61,7 +69,7 @@ def main():
         
         round += 1
 
-    poke = f"avec {winner.alive_pokemons()} pokemon{'s' if winner.alive_pokemons() != 1 else ''} toujours en vie !"
+    poke = f"avec {winner.alive_pokemons()} pokemon{'s' if winner.alive_pokemons() != 1 else ''} toujours en vie"
 
     if result == "break":
 

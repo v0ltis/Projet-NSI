@@ -76,7 +76,7 @@ def show_pokemons(poke_list=liste_pokemons) -> BeautifulTable:
     Renvois une table en ASCII des pokemons disponibles.
     """
     table = BeautifulTable()
-    table.columns.header = ["ID", "Nom", "Type", "PV", "Dégats"]
+    table.columns.header = ["ID", "Nom", "Type", "PV", "Dégats", "Dégats Spé"]
 
     table.set_style(BeautifulTable.STYLE_RST)
 
@@ -89,7 +89,8 @@ def show_pokemons(poke_list=liste_pokemons) -> BeautifulTable:
             pokemon.nom,
             pokemon.element.name.capitalize(),
             pokemon.pv,
-            pokemon.ptdegat
+            pokemon.ptdegat,
+            pokemon.attaque_spe
         ])
 
     return table

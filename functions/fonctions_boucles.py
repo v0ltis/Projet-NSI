@@ -5,7 +5,12 @@ from time import sleep
 from beautifultable import BeautifulTable
 
 
-def init_game():
+def init_game() -> tuple:
+    """
+    Will show this little funny introduction to the game, and return the name of the IA & Player.
+
+    return tuple[str, str]
+    """
     print("Professeur Chen: Bonjour euh ... jeune dresseur !")
     sleep(1.25)
     name = input("Professeur Chen: Comment t'appelles tu déjà ?\nVous: ")
@@ -26,7 +31,13 @@ def init_game():
     return name, ai_name
 
 
-def show_menu():
+def show_menu() -> None:
+    """
+    Invoked after init_game() function being invoked
+
+    Nothing is returned. This function is only executing other functions.
+    """
+
     menu_keys = [
         show_pokemons,
         show_elements,
@@ -60,7 +71,19 @@ def show_menu():
                   )
 
 
-def select_pokemon():
+def select_pokemon(ia_name) -> tuple:
+    """
+    Allow player to select its pokémons.
+
+    Repeated three times:
+        Player select its pokémon
+        IA select a random unselected pokémon, regardless of its or the player's pokemons.
+
+    then, user's and IA's pokemons are returned
+
+    return Tuple[Tuple[Pokemon, Pokemon, Pokemon], Tuple[Pokemon, Pokemon, Pokemon]]
+    """
+
     choix_user = []
 
     choix_ia = []
@@ -93,7 +116,7 @@ def select_pokemon():
         )
 
         choix_ia.append(choix)
-        print(f"l'IA a sélectionnée {choix.nom}, de type {choix.element.name}.\n")
+        print(f"{ia_name} a sélectionnée {choix.nom}, de type {choix.element.name}.\n")
 
         sleep(1)
 
@@ -104,15 +127,15 @@ def tour(joueur, ia, show_pokemons=True):
     if show_pokemons:
         table = BeautifulTable()
         table.set_style(BeautifulTable.STYLE_SEPARATED)
-        table.columns.header = ["Joueur", "Pokemon", "Element", "pv", "degats", "Pokémons en vie"]
+        table.columns.header = ["Joueur", "Pokemon", "Type", "PV", "Degats", "Pokémons en vie", "Attq Spé Dispo"]
 
         pokemon = joueur.pokemons[0]
 
-        table.rows.append([joueur.name, pokemon.nom, pokemon.element.name, pokemon.pv, pokemon.ptdegat, joueur.alive_pokemons()])
+        table.rows.append([joueur.name, pokemon.nom, pokemon.element.name, pokemon.pv, pokemon.ptdegat, joueur.alive_pokemons(), f"Oui ({pokemon.attaque_spe}pts)" if pokemon.attaque_spe_used == False else "Non"])
 
         pokemon = ia.pokemons[0]
 
-        table.rows.append([ia.name, pokemon.nom, pokemon.element.name, pokemon.pv, pokemon.ptdegat, ia.alive_pokemons()])
+        table.rows.append([ia.name, pokemon.nom, pokemon.element.name, pokemon.pv, pokemon.ptdegat, ia.alive_pokemons(), f"Oui ({pokemon.attaque_spe}pts)" if pokemon.attaque_spe_used == False else "Non"])
 
         print(table)
 
@@ -128,11 +151,14 @@ def tour(joueur, ia, show_pokemons=True):
 
     table.rows.append([2, "Quitter le Combat"])
 
+    if joueur.pokemons[0].attaque_spe_used == False:
+        table.rows.append([3, "Attaque spéciale"])
+
     print(table)
 
     response = -1
 
-    while not (0 <= response <= 2):
+    while not ((0 <= response <= 3 and joueur.pokemons[0].attaque_spe_used == False) or 0 <= response <= 2):
         response = int(input("ID de l'action: "))
 
     if response == 2:
@@ -154,6 +180,30 @@ def tour(joueur, ia, show_pokemons=True):
                 print(f"\nVous avez invoqué {new_poke.nom}, de type {new_poke.element.name} avec {new_poke.pv} PV\n")
 
             return tour(joueur, ia, show_pokemons=False)
+
+    elif response == 3:
+        poke_attaq = joueur.pokemons[0]
+
+        pke_def = ia.pokemons[0]
+
+        joueur.pokemons[0].attaque_spe_used = True
+
+        is_dead, degats = poke_attaq.attaque_speciale(pke_def)
+
+        if is_dead:
+            print(f"\n{pke_def.nom} a été tué par {poke_attaq.nom} grâce à son attaque spéciale qui lui a infligé {degats} !\n")
+
+            new_poke = ia.change_pokemon()
+
+            if new_poke != False:
+                print(f"\n{ia.name} a invoqué {new_poke.nom}, de type {new_poke.element.name} avec {new_poke.pv} PV\n")
+
+            return new_poke
+
+        else:
+            print(f"\n{pke_def.nom} a été blessé par {poke_attaq.nom} grâce à son attaque spéciale qui lui a infligé {degats}pts !\n")
+
+            return None
 
     else:
         poke_attaq = joueur.pokemons[0]
@@ -183,19 +233,31 @@ def tour_ia(user, ia):
 
     pke_defence = user.pokemons[0]
 
-    is_dead, degats = poke_attaq.attaque(pke_defence)
+    # randomly use special attaque if not used yet:
+    # 1/2 chance
+    if poke_attaq.attaque_spe_used == False and randint(1, 3) == 1:
+        poke_attaq.attaque_spe_used = True
+
+        is_dead, degats = poke_attaq.attaque_speciale(pke_defence)
+
+        spe_att = True
+
+    else:
+        is_dead, degats = poke_attaq.attaque(pke_defence)
+
+        spe_att = False
 
     if is_dead:
-        print(f"\n{poke_attaq.nom} a infligé {degats}pts de dégats et éliminé {pke_defence.nom} !")
+        print(f"\n{poke_attaq.nom} a infligé {degats}pts de dégats et éliminé {pke_defence.nom} {'grace à son attaque spéciale ' if spe_att else ''}!")
 
         new_poke = user.change_pokemon()
 
         if new_poke != False:
-            print(f"Vous avez invoqué {new_poke.nom}, de type {new_poke.element.name} avec {new_poke.pv} PV\n")
+                print(f"Vous avez invoqué {new_poke.nom}, de type {new_poke.element.name} avec {new_poke.pv} PV\n")
 
         return new_poke
 
     else:
-        print(f"\n{poke_attaq.nom} a infligé {degats}pts de dégats à {pke_defence.nom} !\n")
+        print(f"\n{poke_attaq.nom} a infligé {degats}pts de dégats à {pke_defence.nom} {'grace à son attaque spéciale ' if spe_att else ''}!\n")
 
         return None

@@ -11,7 +11,7 @@ class Trainer:
         """
         Change the selected Pokémon ("Rotate" the list to the next alive Pokémon, if any)
 
-        :return: False or the new selected Pokémon at index 0
+        return False or the new selected Pokémon at index 0
         """
 
         for i in range(3):
@@ -31,7 +31,9 @@ class Trainer:
 
     def alive_pokemons(self) -> int:
         """
-        Return the number of alive pokemons
+        Return the number of alive pokémons, thanks to a list by comprehension:
+
+        A list of all alive pokémons will be generated, then we will return the len of this list. If len(liste) == 0, then all pokémons are dead.
         """
 
         return len([
